@@ -3,12 +3,12 @@ import sys
 import argparse
 import os.path
 import os
+import urllib
 try:
-    import urllib
     import requests
     from bs4 import BeautifulSoup
 except:
-    print("Note this script requires urllib, requests and BeautifulSoup4!")
+    print("Note this script requires requests and BeautifulSoup4!")
     sys.exit(-1)
 
 #workaround python 2.x vs 3
@@ -20,7 +20,7 @@ except NameError:
 #some pages have/use security token added to the image url 
 stripSecToken = lambda name: name.split("?")[0]
 
-#on some pages img url can point to something "different", so copy just what we think we know
+#sometimes img url can point to something unknown, we do not want to copy so accept only "standard" web image formats
 supImgExtensions = ('.jpg', '.jpeg', '.jpe', '.jif', '.jfif', '.jfi', '.jp2', '.j2k', '.jpf',
                     '.jpx', '.jpm', '.mj2', '.jxr', '.hdp', '.wdp', '.webp', '.gif', '.png',
                     '.apng', '.mng', '.tiff', '.tif', '.svg', '.svgz', '.xbm', '.bmp', '.dib',
@@ -43,7 +43,7 @@ def handleCmdLineArgs():
     cmdLineArgs = parser.parse_args()
 
     if (not cmdLineArgs.addr):
-       cmdLineArgs.addr = input('Give address of web page')
+       cmdLineArgs.addr = input('Give address of web page: ')
 
     cmdLineArgs.addr = cmdLineArgs.addr.lstrip('http://').rstrip('/')
 
